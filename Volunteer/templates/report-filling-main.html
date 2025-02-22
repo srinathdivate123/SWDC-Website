@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Filling</title>
+    <link rel="icon" type="image/png" href="https://swd.vit.edu/img/swdlogo3.png">
+    <style>
+        body {
+            margin-left: 200px;
+            margin-right: 200px;
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #copyMsg1,
+        #copyMsg2 {
+            display: none;
+            border: 4px solid black;
+            padding: 2em;
+            width: 600px;
+            text-align: center;
+            background: #fff;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -webkit-transform: translate(-50%, -50%)
+        }
+
+        .blocker {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            content: ' ';
+            background: rgba(0, 0, 0, .5);
+        }
+
+        /* Fullscreen Popup */
+        #fullscreen-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            flex-direction: column;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        #fullscreen-popup button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+        }
+
+        #fullscreen-popup button#deny {
+            background-color: #dc3545;
+        }
+
+        /* Website Content (Hidden Initially) */
+        #website-content {
+            display: none;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+<body>
+    <audio id="errorAudio" src="../static/error.mp3"></audio>
+
+    <div id="popup_show" style="margin-left: 70px; margin-right: 70px; margin-top: 70px;">Hi {{volunteer.vname}}, it seems like pop-ups are disabled on your browser. Please refer to <a
+            href="https://www.youtube.com/watch?v=3MZ13l0ghQw" target="_blank">this short video</a> to enable pop-ups.
+        We need pop-ups to verify if your browser is compatible for report filling. Once you finish your report filling,
+        please feel free to disable pop-ups again!
+    </div>
+
+    <div id="reportfillingcontent" style="display: none;">
+
+        <div id="fullscreen-popup">
+            <p>To continue, please enter fullscreen mode.</p>
+            <button onclick="requestFullScreen()">Enter Fullscreen</button>
+            <button id="deny" onclick="denyFullScreen()">Cancel</button>
+        </div>
+
+
+
+        {% if not activity.report_filling %}
+        <div class="alert alert-danger">
+            Report filling for {{activity.name}} is disabled.
+        </div>
+        {% endif %}
+
+
+        {% if activity.report_filling and volunteer.Cordinator != '' and volunteer.Cordinator != '.' and volunteer.profile_edited != '' and volunteer.profile_edited != '.' and volunteer.submitted == 0 and volunteer.verified == 0 %}
+
+        <div id="copyMsg1">
+            <h6><b>Please type your answers in your own words instead of copy-pasting.</b></h6>
+            <small style="font-size: 17px; color: red;">You have attempted to paste answers <small id="timesCopied">0</small> time(s).</small>
+            <br><br>
+            <button type="button" class="btn btn-sm btn-danger" id="closeBtn1">Close</button>
+        </div>
+
+        <div id="copyMsg2">
+            <h6><b>You can enter at max 15 characters at once.</b></h6>
+            <br><br>
+            <button type="button" class="btn btn-sm btn-danger" id="closeBtn2">Close</button>
+        </div>
+
+        <input contenteditable="false" type="hidden">
+        <input contenteditable="false" type="hidden">
+        <input contenteditable="false" type="hidden">
+        <input contenteditable="false" type="hidden">
+        <input contenteditable="false" type="hidden">
+        <input contenteditable="false" type="hidden">
+
+        <form action="{% url 'report-filling' %}" method="POST" id="myForm" style="margin-bottom: 20px;">
+            {% csrf_token %}
+            <input style="display: none;" value="{{hours}}" id="hours">
+            <input style="display: none;" value="{{minutes}}" id="minutes">
+            <h3 class="text-center">Report Filling for {{volunteer.activity}}</h3>
+
+
+            <h6 class="text-center"><b>
+                    <div class="spinner-grow text-success" role="status"
+                        style="height: 12px; width: 12px; margin: 2px;"><span class="visually-hidden">Loading...</span>
+                    </div>
+                    Time left before your session expires:
+                    {% comment %} <b id="time_left"></b> minutes
+                </b></h6> {% endcomment %}
+            <b id="timer"></b></b></h6>
+            <script>
+                let totalSeconds = 250 * 60; // 250 minutes in seconds
+
+                function updateTimer() {
+                    let minutes = Math.floor(totalSeconds / 60);
+                    let seconds = totalSeconds % 60;
+
+                    // Format time as MM:SS
+                    document.getElementById("timer").textContent =
+                        minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+
+                    if (totalSeconds > 0) {
+                        totalSeconds--;
+                        setTimeout(updateTimer, 1000); // Call function every second
+                    } else {
+                        alert("Time's up!");
+                        window.location.href = "{% url 'logout' %}";
+                    }
+                }
+                updateTimer(); // Start the countdown
+            </script>
+
+
+            <p class="text-center">
+                Your Browser: {{browser}} <br>
+                Your Operating System: {{os}}
+            </p>
+
+            <li style="text-align: left; color:red; font-size: 17px;">
+                <small>
+                    Copy-pasting answers is prohibited and is not possible on this website.
+                </small>
+            </li>
+
+            <li style="text-align: left; color:red; font-size: 17px;">
+                <small>
+                    Do not refresh this page or click on the back button. Doing so will delete all your answers and
+                    you'll have to type it again.
+                </small>
+            </li>
+            <li style="text-align: left; color:red; font-size: 17px;">
+                <small>
+                    You may logout and login again to set your session expiry time back to 250 minutes. However, in
+                    doing so, your typed answers will be lost.
+                </small>
+            </li>
+            <li style="text-align: left; color:red; font-size: 17px;">
+                <small>
+                    Refreshing this page will <b>not</b> reset your session expiry time.
+                </small>
+            </li>
+            <li style="text-align: left; color:red; font-size: 17px;">
+                <small>
+                    Make sure you submit your report before your session expires.
+                </small>
+            </li>
+            <br>
+
+            <div class="form-outline mb-4 ques" contenteditable id="quest1" style="display: none;">
+                <label class="form-label" contenteditable="false">The objectives of {{volunteer.activity}}</label>
+                <textarea name="quest1" class="form-control ans" rows="4" maxlength="1300"
+                    style="height: 150px;">{{volunteer.ans1}}</textarea>
+                <div style="text-align:right; padding-right: 20px;" id="countMessage1" contenteditable="false"><span
+                        id="wordCount1">700</span> characters to go!</div>
+                <div style="text-align:right; padding-right: 20px; color:green; display:none;" id="successMessage1"
+                    contenteditable="false">Yippee! You've answered this question!</div>
+            </div>
+
+            <div class="form-outline mb-4 ques" contenteditable="false" id="quest2" style="display: none;">
+                <label class="form-label">Write a brief description of {{volunteer.activity}}</label>
+                <textarea name="quest2" class="form-control ans" rows="4" maxlength="1300"
+                    style="height: 150px;">{{volunteer.ans2}}</textarea>
+                <div style="text-align:right; padding-right: 20px;" id="countMessage2" contenteditable="false"><span
+                        id="wordCount2">700</span> characters to go!</div>
+                <div style="text-align:right; padding-right: 20px; color:green; display:none;" id="successMessage2"
+                    contenteditable="false">Cheers! You've answered this question!</div>
+            </div>
+
+            <div class="form-outline mb-4 ques" contenteditable="false" id="quest3" style="display: none;">
+                <label class="form-label">Benefits to the Society</label>
+                <textarea name="quest3" class="form-control ans" rows="4" maxlength="1300"
+                    style="height: 150px;">{{volunteer.ans3}}</textarea>
+                <div style="text-align:right; padding-right: 20px;" id="countMessage3" contenteditable="false"><span
+                        id="wordCount3">700</span> characters to go!</div>
+                <div style="text-align:right; padding-right: 20px; color:green; display:none;" id="successMessage3"
+                    contenteditable="false">Good going! You've answered this question!</div>
+            </div>
+
+            <div class="form-outline mb-4 ques" contenteditable="false" id="quest4" style="display: none;">
+                <label class="form-label">Benefits to Self</label>
+                <textarea name="quest4" class="form-control ans" rows="4" maxlength="1300"
+                    style="height: 150px;">{{volunteer.ans4}}</textarea>
+                <div style="text-align:right; padding-right: 20px;" id="countMessage4"><span id="wordCount4"
+                        contenteditable="false">700</span> characters to go!</div>
+                <div style="text-align:right; padding-right: 20px; color:green; display:none;" id="successMessage4"
+                    contenteditable="false">Great buddy! You've answered this question!</div>
+            </div>
+
+            <div class="form-outline mb-4 ques" contenteditable="false" id="quest5" style="display: none;">
+                <label class="form-label">Learning, experiences & challenges that you want to share</label>
+                <textarea name="quest5" class="form-control ans" rows="4" maxlength="1300"
+                    style="height: 150px;">{{volunteer.ans5}}</textarea>
+                <div style="text-align:right; padding-right: 20px;" id="countMessage5" contenteditable="false"><span
+                        id="wordCount5">700</span> characters to go!</div>
+                <div style="text-align:right; padding-right: 20px; color:green; display:none;" id="successMessage5"
+                    contenteditable="false">Yippee! You've answered this question!</div>
+            </div>
+
+            <div class="form-outline mb-4 ques" contenteditable="false" id="quest6" style="display: none;">
+                <label class="form-label">How did {{volunteer.activity}} help you to shape your empathy</label>
+                <textarea name="quest6" class="form-control ans" rows="4" maxlength="1300"
+                    style="height: 150px;">{{volunteer.ans6}}</textarea>
+                <div style="text-align:right; padding-right: 20px;" id="countMessage6" contenteditable="false"><span
+                        id="wordCount6">700</span> characters to go!</div>
+                <div style="text-align:right; padding-right: 20px; color:green; display:none;" id="successMessage6"
+                    contenteditable="false">Wonderful job! You've answered this question!</div>
+            </div>
+
+            <p id="errorMessage" style="display: none; color:red;">
+                Please type the needed number for characters for each question!
+            </p>
+
+            <p id="answersError" style="color:red; width: 90%;"></p>
+
+        <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
+
+            <button id="prev-btn" type="button"
+                style="background-color: #C9DF8A; color: white; border-radius: 8px; border: none; padding: 10px 20px; cursor: pointer; display: none;">
+                Previous Question
+            </button>
+
+            <button id="next-btn" type="button"
+                style="background-color: #C9DF8A; color: white; border-radius: 8px; border: none; padding: 10px 20px; cursor: pointer;">
+                Next Question
+            </button>
+            <br><br>
+            <button type="submit" class="btn btn-success" id="submitBtn"
+                style="background-color: grey; color: white; display: none; border-radius: 8px; border: none; padding: 10px 20px; cursor: pointer;">
+                Answer all questions to enable submit button
+            </button>
+        </div>
+        </form>
+        <script src="{% static 'dashboard/js/do-not-open-this.js' %}"></script>
+        {% else %}
+
+
+        {% if activity.report_filling and volunteer.Cordinator != '' and volunteer.Cordinator != '.' and volunteer.profile_edited != '' and volunteer.profile_edited != '.' and volunteer.submitted == 0 and volunteer.verified == 2 %}
+
+        <div id="copyMsg1">
+            <h6><b>Please type your answers in your own words instead of copy-pasting.</b></h6>
+            <small style="font-size: 17px; color: red;">You have attempted to paste answers <small id="timesCopied">0</small> time(s).</small>
+            <br><br>
+            <button type="button" class="btn btn-sm btn-danger" id="closeBtn1">Close</button>
+        </div>
+
+        <div id="copyMsg2">
+            <h6><b>You can enter at max 15 characters at once.</b></h6>
+            <br><br>
+            <button type="button" class="btn btn-sm btn-danger" id="closeBtn2">Close</button>
+        </div>
+
+        <input contenteditable="false" type="hidden">
+        <input contenteditable="false" type="hidden">
+        <input contenteditable="false" type="hidden">
+        <input contenteditable="false" type="hidden">
+        <input contenteditable="false" type="hidden">
+        <input contenteditable="false" type="hidden">
+
+        <form action="{% url 'report-filling' %}" method="POST" id="myForm" style="margin-bottom: 20px;">
+            {% csrf_token %}
+            <input style="display: none;" value="{{hours}}" id="hours">
+            <input style="display: none;" value="{{minutes}}" id="minutes">
+            <h3 class="text-center">Report Filling for {{volunteer.activity}}</h3>
+
+
+            <h6 class="text-center"><b>
+                    <div class="spinner-grow text-success" role="status"
+                        style="height: 12px; width: 12px; margin: 2px;"><span class="visually-hidden">Loading...</span>
+                    </div>
+                    Time left before your session expires:
+                    {% comment %} <b id="time_left"></b> minutes
+                </b></h6> {% endcomment %}
+            <b id="timer"></b></b></h6>
+            <script>
+                totalSeconds = 250 * 60; // 250 minutes in seconds
+
+                function updateTimer() {
+                    let minutes = Math.floor(totalSeconds / 60);
+                    let seconds = totalSeconds % 60;
+
+                    // Format time as MM:SS
+                    document.getElementById("timer").textContent =
+                        minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+
+                    if (totalSeconds > 0) {
+                        totalSeconds--;
+                        setTimeout(updateTimer, 1000); // Call function every second
+                    } else {
+                        alert("Time's up!");
+                        window.location.href = "{% url 'logout' %}";
+                    }
+                }
+                updateTimer(); // Start the countdown
+            </script>
+
+
+            <p class="text-center">
+                Your Browser: {{browser}} <br>
+                Your Operating System: {{os}}
+            </p>
+
+            <li style="text-align: left; color:red; font-size: 17px;">
+                <small>
+                    Copy-pasting answers is prohibited and is not possible on this website.
+                </small>
+            </li>
+
+            <li style="text-align: left; color:red; font-size: 17px;">
+                <small>
+                    Do not refresh this page or click on the back button. Doing so will delete all your answers and
+                    you'll have to type it again.
+                </small>
+            </li>
+            <li style="text-align: left; color:red; font-size: 17px;">
+                <small>
+                    You may logout and login again to set your session expiry time back to 250 minutes. However, in
+                    doing so, your typed answers will be lost.
+                </small>
+            </li>
+            <li style="text-align: left; color:red; font-size: 17px;">
+                <small>
+                    Refreshing this page will <b>not</b> reset your session expiry time.
+                </small>
+            </li>
+            <li style="text-align: left; color:red; font-size: 17px;">
+                <small>
+                    Make sure you submit your report before your session expires.
+                </small>
+            </li>
+            <br>
+
+            {% if volunteer.rejection_reason %}
+            <div class="alert alert-danger">
+                Your report has been rejected by {{volunteer.Cordinator}}.
+                <br/>
+                <b>Reason:</b> {{volunteer.rejection_reason}}
+            </div>
+            {% endif %}
+
+            <div class="form-outline mb-4 ques" contenteditable id="quest1" style="display: none;">
+                <label class="form-label" contenteditable="false">The objectives of {{volunteer.activity}}</label>
+                <textarea name="quest1" class="form-control ans" rows="4" maxlength="1300"
+                    style="height: 150px;">{{volunteer.ans1}}</textarea>
+                <div style="text-align:right; padding-right: 20px;" id="countMessage1" contenteditable="false"><span
+                        id="wordCount1">700</span> characters to go!</div>
+                <div style="text-align:right; padding-right: 20px; color:green; display:none;" id="successMessage1"
+                    contenteditable="false">Yippee! You've answered this question!</div>
+            </div>
+
+            <div class="form-outline mb-4 ques" contenteditable="false" id="quest2" style="display: none;">
+                <label class="form-label">Write a brief description of {{volunteer.activity}}</label>
+                <textarea name="quest2" class="form-control ans" rows="4" maxlength="1300"
+                    style="height: 150px;">{{volunteer.ans2}}</textarea>
+                <div style="text-align:right; padding-right: 20px;" id="countMessage2" contenteditable="false"><span
+                        id="wordCount2">700</span> characters to go!</div>
+                <div style="text-align:right; padding-right: 20px; color:green; display:none;" id="successMessage2"
+                    contenteditable="false">Cheers! You've answered this question!</div>
+            </div>
+
+            <div class="form-outline mb-4 ques" contenteditable="false" id="quest3" style="display: none;">
+                <label class="form-label">Benefits to the Society</label>
+                <textarea name="quest3" class="form-control ans" rows="4" maxlength="1300"
+                    style="height: 150px;">{{volunteer.ans3}}</textarea>
+                <div style="text-align:right; padding-right: 20px;" id="countMessage3" contenteditable="false"><span
+                        id="wordCount3">700</span> characters to go!</div>
+                <div style="text-align:right; padding-right: 20px; color:green; display:none;" id="successMessage3"
+                    contenteditable="false">Good going! You've answered this question!</div>
+            </div>
+
+            <div class="form-outline mb-4 ques" contenteditable="false" id="quest4" style="display: none;">
+                <label class="form-label">Benefits to Self</label>
+                <textarea name="quest4" class="form-control ans" rows="4" maxlength="1300"
+                    style="height: 150px;">{{volunteer.ans4}}</textarea>
+                <div style="text-align:right; padding-right: 20px;" id="countMessage4"><span id="wordCount4"
+                        contenteditable="false">700</span> characters to go!</div>
+                <div style="text-align:right; padding-right: 20px; color:green; display:none;" id="successMessage4"
+                    contenteditable="false">Great buddy! You've answered this question!</div>
+            </div>
+
+            <div class="form-outline mb-4 ques" contenteditable="false" id="quest5" style="display: none;">
+                <label class="form-label">Learning, experiences & challenges that you want to share</label>
+                <textarea name="quest5" class="form-control ans" rows="4" maxlength="1300"
+                    style="height: 150px;">{{volunteer.ans5}}</textarea>
+                <div style="text-align:right; padding-right: 20px;" id="countMessage5" contenteditable="false"><span
+                        id="wordCount5">700</span> characters to go!</div>
+                <div style="text-align:right; padding-right: 20px; color:green; display:none;" id="successMessage5"
+                    contenteditable="false">Yippee! You've answered this question!</div>
+            </div>
+
+            <div class="form-outline mb-4 ques" contenteditable="false" id="quest6" style="display: none;">
+                <label class="form-label">How did {{volunteer.activity}} help you to shape your empathy</label>
+                <textarea name="quest6" class="form-control ans" rows="4" maxlength="1300"
+                    style="height: 150px;">{{volunteer.ans6}}</textarea>
+                <div style="text-align:right; padding-right: 20px;" id="countMessage6" contenteditable="false"><span
+                        id="wordCount6">700</span> characters to go!</div>
+                <div style="text-align:right; padding-right: 20px; color:green; display:none;" id="successMessage6"
+                    contenteditable="false">Wonderful job! You've answered this question!</div>
+            </div>
+
+            <p id="errorMessage" style="display: none; color:red;">
+                Please type the needed number for characters for each question!
+            </p>
+
+            <p id="answersError" style="color:red; width: 90%;"></p>
+
+            <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
+
+            <button id="prev-btn" type="button"
+                style="background-color: #C9DF8A; color: white; border-radius: 8px; border: none; padding: 10px 20px; cursor: pointer; display: none;">
+                Previous Question
+            </button>
+
+            <button id="next-btn" type="button"
+                style="background-color: #C9DF8A; color: white; border-radius: 8px; border: none; padding: 10px 20px; cursor: pointer;">
+                Next Question
+            </button>
+            <br><br>
+            <button type="submit" class="btn btn-success" id="submitBtn"
+                style="background-color: grey; color: white; margin-bottom: 20px; display: none; border-radius: 8px; border: none; padding: 10px 20px; cursor: pointer;">
+                Answer all questions to enable submit button
+            </button>
+        </div>
+        </form>
+        <script src="{% static 'dashboard/js/do-not-open-this.js' %}"></script>
+        {% endif %}
+        {% endif %}
+    </div>
+
+
+    <form id="logoutForm" method="POST" action="{% url 'logout' %}" style="display: none;">
+        {% csrf_token %}
+        <button type="submit" id="logoutButton" class="logout-btn" style="position: absolute; top: 97%; left: 30%;">
+            <i class="fas fa-sign-out-alt" style="margin-right: 8px;"></i> Logout
+        </button>
+    </form>
+    <script>
+        setInterval(function () {
+            let before = performance.now();
+            debugger;
+            let after = performance.now();
+
+            if (after - before > 100) {
+                alert('Oops! You shouldn\'t have opened the developer options. We\'re logging you out now!');
+                document.getElementById("logoutForm").submit();
+            }
+        }, 500);
+    </script>
+</body>
+</html>

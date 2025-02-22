@@ -1,0 +1,223 @@
+{% extends 'cdashboard.html' %}
+{% block ctitle %}  Activity Attendance {% endblock ctitle %}
+{% block ccontent %}
+{% load static %}
+<style>
+    /* General Styles */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 90%;
+        max-width: 1000px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    /* Responsive Table Wrapper */
+    .table-container {
+        overflow-x: auto; /* Enable horizontal scrolling */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid #ddd;
+    }
+
+    th,
+    td {
+        padding: 12px;
+        text-align: left;
+        white-space: nowrap;
+        /* Prevent wrapping */
+    }
+
+    th {
+        background-color: #f8f8f8;
+        color: #333;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Checkbox Styling */
+    input[type="checkbox"] {
+        transform: scale(1.2);
+        cursor: pointer;
+    }
+
+.submit {
+    display: block;
+    width: fit-content;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    margin: 0 auto;
+    text-align: center;
+}
+
+ /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        body {
+            padding: 10px;
+            margin-top:0rem;
+        }
+        .box-container {
+        margin-left: 15%;
+        }
+        .container {
+            width: 100%;
+            padding: 15px;
+        }
+
+        .table-container {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            display: block;
+            width: 100%;
+        }
+
+        th, td {
+            font-size: 14px;
+            padding: 8px;
+        }
+
+        input[type="date"], .submit-btn, .submit {
+            font-size: 14px;
+            padding: 10px;
+        }
+    }
+
+</style>
+
+
+        <div class="container">
+    <form method="post" action="{% url 'fetchAbsentVolunteers' %}">
+        {% csrf_token %}
+        <input type="date" name="date" style="border: 1px solid black; display: block;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;">
+        <input type="submit" class="submit" > <!-- Added class="submit" -->
+    </form>
+</div>
+
+        <!--<p>{{volunteers}}</p>-->
+
+        {% if volunteers %}
+            <h1>Mark Social Services Attendance</h1>
+            <form method="post" action="{% url 'activityAttendance' %}">
+                {% csrf_token %}
+                <input type="hidden" name="date" value="{{ date }}">
+                <input type="hidden" name="eventType" value="SS">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mark Attendance</th>
+                            <th>Roll No.</th>
+                            <th>Name</th>
+                            <th>PRN</th>
+                            <th>Division</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for div, vols in volunteers.items %}
+                            <!--<tr>{{ div }}</tr>-->
+                            {% for vol in vols %}
+                                <tr>
+                                    <td><input type="checkbox" id="{{vol.email}}" name="attendance" value="{{vol.email}}"></td>
+                                    <td>{{vol.roll}}</td>
+                                    <td>{{vol.vname}}</td>
+                                    <td>{{vol.prn}}</td>
+                                    <td>{{ div }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button class="submit-btn">Submit Attendance</button>
+            </form>
+        {% endif %}
+
+        <br><br>
+
+        {% if flagshipVols %}
+            <h1>Mark Flagship Attendance</h1>
+            <form method="post" action="{% url 'activityAttendance' %}">
+                {% csrf_token %}
+                <input type="hidden" name="date" value="{{ date }}">
+                <input type="hidden" name="eventType" value="FE">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mark Attendance</th>
+                            <th>Roll No.</th>
+                            <th>Name</th>
+                            <th>PRN</th>
+                            <th>Division</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for div, vols in flagshipVols.items %}
+                            <!--<tr>{{ div }}</tr>-->
+                            {% for vol in vols %}
+                                <tr>
+                                    <td><input type="checkbox" id="{{vol.email}}" name="attendance" value="{{vol.email}}"></td>
+                                    <td>{{vol.roll}}</td>
+                                    <td>{{vol.vname}}</td>
+                                    <td>{{vol.prn}}</td>
+                                    <td>{{ div }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button class="submit-btn">Submit Attendance</button>
+            </form>
+        {% endif %}
+
+        {% if date and not volunteers and not flagshipVols %}
+            <p>No volunteers present to mark attendance.</p>
+        {% endif %}
+    </div>
+
+{% endblock ccontent %}

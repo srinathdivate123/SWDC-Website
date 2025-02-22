@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Home</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link href="https://swd.vit.edu/img/swdlogo3.png" rel="icon">
+  <link href="{% static 'home_assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+  <link href="{% static 'home_assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'home_assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'home_assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'home_assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'home_assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+  <link href="{% static 'home_assets/css/main.css' %}" rel="stylesheet">
+  <style>
+    .customicon {
+      display: inline-block;
+      width: 70px;
+      height: 70px;
+      background-size: cover;
+      background-position: center;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+      <div class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'home_assets/img/logo.png' %}" alt="">
+        <h1 class="sitename">SWDC</h1>
+      </div>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="#MainContent" class="active">Main Content<br></a></li>
+          <li><a href="#TechStack">Tech Stack</a></li>
+          <li><a href="#AboutProject">About the Project</a></li>
+          <li><a href="#LiveDemo">Live Demo</a></li>
+          <li><a href="#TheDevs">The Devs</a></li>
+
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+
+    </div>
+  </header>
+
+  <main class="main">
+    <div id="MainContent"></div>
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up" style="margin-top: 200px;">
+      <p>The Social Welfare & Development Committee</p>
+      <p>VIT Pune<br></p>
+    </div><!-- End Section Title -->
+
+
+    <!-- Stats Section -->
+    <section class="stats section">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row gy-4">
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item d-flex align-items-center w-100 h-100">
+              <i class="bi bi-lightbulb-fill color-yellow flex-shrink-0"></i>
+              <div>
+                <span data-purecounter-start="0" data-purecounter-end="{{totalLogins}}" data-purecounter-duration="1"
+                  class="purecounter"></span>
+                <p>Logins by users</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item d-flex align-items-center w-100 h-100">
+              <i class="bi bi-person-check color-orange flex-shrink-0" style="color: #ee6c20;"></i>
+              <div>
+                <span data-purecounter-start="0" data-purecounter-end="{{uCount}}" data-purecounter-duration="1"
+                  class="purecounter"></span>
+                <p>Users</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item d-flex align-items-center w-100 h-100">
+              <i class="bi bi-person-arms-up color-green flex-shrink-0" style="color: #15be56;"></i>
+              <div>
+                <span data-purecounter-start="0" data-purecounter-end="{{vCount}}" data-purecounter-duration="1"
+                  class="purecounter"></span>
+                <p>Volunteers</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item d-flex align-items-center w-100 h-100">
+              <i class="bi bi-people color-pink flex-shrink-0" style="color: #bb0852;"></i>
+              <div>
+                <span data-purecounter-start="0" data-purecounter-end="{{cCount}}" data-purecounter-duration="1"
+                  class="purecounter"></span>
+                <p>Coordinators</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <div class="container section-title" data-aos="fade-up">
+      <!-- <p>Live Full Stack Website<br></p> -->
+
+      <h2 style="text-transform: capitalize;">Stats last updated: {{lastUpdated}}</h2>
+      <br>
+      <p style="font-size: 13px;">Page hits: {{hits}}</p>
+    </div>
+
+
+
+
+
+    <section id="TechStack" class="services section">
+
+
+      <div class="container section-title" data-aos="fade-up">
+        <p>Tech Stack<br></p>
+      </div>
+
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="service-item item-cyan position-relative">
+              <i class="customicon" style="background-image: url({% static 'home_assets/images/django.png' %});"></i>
+              <h3>DJango</h3>
+              <p>DJango's robustness and well-structured architecture made it a suitable choice for this website handling
+                many users</p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="service-item item-orange position-relative">
+              <i class="customicon" style="background-image: url({% static 'home_assets/images/python.png' %});"></i>
+              <h3>Python</h3>
+              <p>Python is used to add other backend functionality like multithreading, generating PDFs, sheets, sending
+                mails, etc</p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="service-item item-teal position-relative">
+              <i class="customicon" style="background-image: url({% static 'home_assets/images/linux.png' %});"></i>
+              <h3>Linux</h3>
+              <p>This website is hosted on a Linux environment as Django deployment tools (like Gunicorn, Nginx, and
+                Docker) integrate seamlessly with Linux</p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="service-item item-red position-relative">
+              <i class="customicon" style="background-image: url({% static 'home_assets/images/python-libs.png' %});"></i>
+              <h3>Other Python Libraries</h3>
+              <p>GeoPy, OpenPyxl, Pillow, PyPDF2, PyYAML, QrCode, x-HTML-2-PDF are used to handle backend tasks </p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+            <div class="service-item item-indigo position-relative">
+              <i class="customicon" style="background-image: url({% static 'home_assets/images/SQL.png' %});"></i>
+              <h3>SQL Database</h3>
+              <p>A SQL database is used to store data of all the users. <b>This project has 13 database tables</b></p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+            <div class="service-item item-pink position-relative">
+              <i class="customicon" style="background-image: url({% static 'home_assets/images/js.png' %});"></i>
+              <h3>JavaScript</h3>
+              <p>JavaScript provides the optimal user experience and also handles some part of the communication with
+                server using requests</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><!-- /Services Section -->
+
+
+
+
+
+
+
+    <section id="AboutProject" class="faq section">
+      <div class="container section-title" data-aos="fade-up">
+        <p>About The Project</p>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="faq-container">
+              <div class="faq-item faq-active">
+                <h3>What's this website about?</h3>
+                <div class="faq-content">
+                  <p>This is the official website of the Social Welfare & Development Committee (VIT Pune) and was developed by a handful of enthusiastic developers who collaborated to leave behind a legacy!</p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div>
+              <div class="faq-item">
+                <h3>Who are these developers?</h3>
+                <div class="faq-content">
+                  <p>Find them <a href="#TheDevs">here!</a></p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div>
+              <div class="faq-item">
+                <h3>Any special features of this website?</h3>
+                <div class="faq-content">
+                  <p>Coming soon. Please check back!</p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="faq-container">
+              <div class="faq-item">
+                <h3>What's the purpose of this website?</h3>
+                <div class="faq-content">
+                  <p>First Year students of VIT Pune have to do a Social Service Course in their freshman year.This website is used for their registrations, attendance, report filling and report verification.
+                    <br><br>
+                  Registration happen division-wise, each division of students is eligible for a particular set of activities and students have to choose among the activities.
+                  <br><br>
+                  The activities happen in various areas of Pune. Attendance of students is marked by coordinators and requires the students to be within 2km of the activity location, pre-determined by a Google Maps link.
+                  <br><br>
+                  Once the activities are completed, students have to fill a report of it. <b>The report filling page does not allow pasting answers into it, nor does it allow exiting full screen or changing tabs. If students install extensions to counter these, the extensions are tracked & blocked</b>
+                  <br><br>
+                  Coordinators verify the reports filled by students, and on approval, students are mailed a activity completion certificate and responses of their report
+                  </p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div>
+
+              <div class="faq-item">
+                <h3>What is the future of this website?</h3>
+                <div class="faq-content">
+                  <p>Every student who takes admission into VIT Pune has to do the Social Services Course in their Freshman Year. So this website is doomed to grow in terms of the number of users and logins.
+                    <br><br>
+                  As long as <a href="https://www.pythonanywhere.com/" target="_blank">PythonAnywhere</a> keeps hosting websites for free, this website would keep running forever!
+                  </p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div>
+
+              <div class="faq-item">
+                <h3>Do you really have these many users, logins, etc?</h3>
+                <div class="faq-content">
+                  <p>Yes, please reach out to the developers and they'll be happy to show it :)</p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+
+
+    <section id="LiveDemo" class="hero section">
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
+            <h1 data-aos="fade-up">Watch a live demo</h1>
+            <p data-aos="fade-up" data-aos-delay="100">The video explains the project in depth
+            <div class="d-flex flex-column flex-md-row" data-aos="fade-up" data-aos-delay="200">
+              <a href="https://swdc.pythonanywhere.com/a/login" target="_blank" class="btn-get-started">Guest Login <i class="bi bi-arrow-right"></i></a>
+              <a href=""
+                class="glightbox btn-watch-video d-flex align-items-center justify-content-center ms-0 ms-md-4 mt-4 mt-md-0"><i
+                  class="bi bi-play-circle"></i><span>Watch Video <small>(Coming soon)</small></span></a>
+            </div>
+          </div>
+          <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-out">
+            <img src="{% static 'home_assets/img/hero-img.png' %}" class="img-fluid animated" alt="">
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+
+
+
+
+    <section id="TheDevs" class="team section">
+      <div class="container section-title" data-aos="fade-up">
+        <h2>The Team</h2>
+        <p>Curious Devs</p>
+      </div>
+      <div class="container">
+
+        <div class="row gy-4">
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+            <div class="team-member">
+              <div class="member-img">
+                <img src="{% static 'home_assets/images/Rishikesh_Unawane.jpg' %}" class="img-fluid" alt="">
+              </div>
+              <div class="member-info">
+                <h4>Rishikesh Unawane</h4>
+                <span style="color: black;">SWE @Microsoft</span>
+                <p></p>
+                <div>
+                  <a style="margin-right: 10px;" href="mailto:rishikeshunawane77@gmail.com" target="_blank"><i class="bi bi-envelope-fill"></i></a>
+                  <a style="margin-right: 10px;" href="https://www.linkedin.com/in/rishikesh-unawane-3670371ba" target="_blank"><i class="bi bi-linkedin"></i></a>
+                  <a style="margin-right: 10px;" href="https://www.instagram.com/rishikesh_unawane" target="_blank"><i class="bi bi-instagram"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
+            <div class="team-member">
+              <div class="member-img">
+                <img src="{% static 'home_assets/images/Ankita_Kumari.png' %}" class="img-fluid" alt="">
+
+              </div>
+              <div class="member-info">
+                <h4>Ankita Kumari</h4>
+                <span style="color: black;">SWE @Airtel</span>
+                <p></p>
+                <div>
+                  <a style="margin-right: 10px;" href="mailto:ankitachaturvedi890@gmail.com" target="_blank"><i class="bi bi-envelope-fill"></i></a>
+                  <a style="margin-right: 10px;" href="https://www.linkedin.com/in/ankita-kumari-1a4525194" target="_blank"><i class="bi bi-linkedin"></i></a>
+                  <a style="margin-right: 10px;" href="https://www.instagram.com/ankita..chaturvedi" target="_blank"><i class="bi bi-instagram"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
+            <div class="team-member">
+              <div class="member-img">
+                <img src="{% static 'home_assets/images/Srinath_Divate.jpg' %}" class="img-fluid" alt="">
+              </div>
+              <div class="member-info">
+                <h4>Srinath Divate</h4>
+                <span style="color: black;">Building AI @Cadence</span>
+                <p></p>
+                <div>
+                  <a style="margin-right: 10px;" href="mailto:srinathdivate123@gmail.com" target="_blank"><i class="bi bi-envelope-fill"></i></a>
+                  <a style="margin-right: 10px;" href="https://www.linkedin.com/in/srinath-divate-6b513b205/" target="_blank"><i class="bi bi-linkedin"></i></a>
+                  <a style="margin-right: 10px;" href="https://www.instagram.com/srinath_divate" target="_blank"><i class="bi bi-instagram"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
+            <div class="team-member">
+              <div class="member-img">
+                <img src="{% static 'home_assets/images/Mandar_Gatke.png' %}" class="img-fluid" alt="">
+              </div>
+              <div class="member-info">
+                <h4>Mandar Gatke</h4>
+                <span style="color: black;">SWE Intern @Morgan Stanley</span>
+                <p></p>
+                <div>
+                  <a style="margin-right: 10px;" href="mailto:mandargatke@gmail.com" target="_blank"><i class="bi bi-envelope-fill"></i></a>
+                  <a style="margin-right: 10px;" href="https://www.linkedin.com/in/mandar-gatke-dev" target="_blank"><i class="bi bi-linkedin"></i></a>
+                  <a style="margin-right: 10px;" href="https://www.instagram.com/mandar_gatke" target="_blank"><i class="bi bi-instagram"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Second row -->
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+              <!-- New member goes here -->
+          </div>
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
+            <div class="team-member">
+              <div class="member-img">
+                <img src="{% static 'home_assets/images/Harshita_Yadav.jpg' %}" class="img-fluid" alt="">
+              </div>
+              <div class="member-info">
+                <h4>Harshita Yadav</h4>
+                <span style="color: black;">Upcoming SWE Intern @Barclays</span>
+                <p></p>
+                <div>
+                  <a style="margin-right: 10px;" href="mailto:harshita3792@gmail.com" target="_blank"><i class="bi bi-envelope-fill"></i></a>
+                  <a style="margin-right: 10px;" href="https://www.linkedin.com/in/harshita-yadav-5576b8260/" target="_blank"><i class="bi bi-linkedin"></i></a>
+                  <a style="margin-right: 10px;" href="https://www.instagram.com/_harshita_3001" target="_blank"><i class="bi bi-instagram"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
+            <div class="team-member">
+              <div class="member-img">
+                <img src="{% static 'home_assets/images/Pranav_Doshi.png' %}" class="img-fluid" alt="">
+              </div>
+              <div class="member-info">
+                <h4>Pranav Doshi</h4>
+                <span style="color: black;">Student, VIT Pune</span>
+                <p></p>
+                <div>
+                  <a style="margin-right: 10px;" href="mailto:pranav08doshi@gmail.com" target="_blank"><i class="bi bi-envelope-fill"></i></a>
+                  <a style="margin-right: 10px;" href="https://www.linkedin.com/in/pranav-doshi-5463b2249/" target="_blank"><i class="bi bi-linkedin"></i></a>
+                  <a style="margin-right: 10px;" href="https://www.instagram.com/pranav8doshi/" target="_blank"><i class="bi bi-instagram"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
+            <!-- New member goes here -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+  </main>
+
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i      class="bi bi-arrow-up-short"></i></a>
+  <script src="{% static 'home_assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'home_assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'home_assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'home_assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'home_assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'home_assets/vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+  <script src="{% static 'home_assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'home_assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'home_assets/js/main.js' %}"></script>
+</body>
+</html>

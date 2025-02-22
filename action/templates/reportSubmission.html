@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Submission Data</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Report Submission Data</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Activity Name</th>
+                <th>Not yet submitted</th>
+                <th>Submitted, yet to be verified</th>
+                <th>Approved</th>
+                <th>Rejected, yet to fill again</th>
+                <th>Failed for not meeting criteria</th>
+                <th>Failed for not submitting report</th>
+                <th>Total number of volunteers</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for activity in activities %}
+            <tr>
+                <td>{{ activity.name }}</td>
+                <td>{{ activity.not_yet_submitted }}</td>
+                <td>{{ activity.submitted_yet_to_be_verified }}</td>
+                <td>{{ activity.verified }}</td>
+                <td>{{ activity.rejected }}</td>
+                <td>{{ activity.failed_by_coords }}</td>
+                <td>{{ activity.failed_for_not_submitting_report }}</td>
+                <td>{{ activity.total }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {{s}}
+    <script>
+
+    function isRunningInVM() {
+    let vmDetected = false;
+
+    // Check WebGL Renderer
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (gl) {
+        const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+        const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+        if (renderer.includes("VMware") || renderer.includes("VirtualBox")) {
+            vmDetected = true;
+        }
+    }
+
+    // Check Battery API
+    navigator.getBattery().then(battery => {
+        if (!battery.chargingTime && !battery.dischargingTime) {
+            vmDetected = true;
+        }
+    });
+
+    return vmDetected;
+}
+
+console.log(isRunningInVM());
+
+</script>
+</body>
+</html>

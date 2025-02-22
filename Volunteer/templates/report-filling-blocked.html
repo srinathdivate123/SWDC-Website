@@ -1,0 +1,9 @@
+{% extends 'vdashboard.html' %}
+{% block vtitle %} Blocked {% endblock vtitle %}
+{% block vcontent %}
+{% load static %}
+<div class="alert alert-info">
+    For security reasons, the Report Filling page is only accessible via a laptop/desktop.
+</div>
+<a href="{% url 'vdashboard' %}">Click here to go back!</a>
+{% endblock vcontent %}
