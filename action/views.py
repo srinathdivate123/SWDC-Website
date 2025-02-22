@@ -435,7 +435,7 @@ def runFunction(request):
                 if day == 60:
                     file_path = '/home/swdc/SWDCWebsite/prod-database.db'
                     file_name = str(datetime.date.today()) + '-prod-database.db'
-                    upload_to_google_drive(file_path, file_name, '1Jf-AxDaqNe0HUpv78HXAiYCuNTjQbXeK')
+                    upload_to_google_drive(file_path, file_name, os.getenv('GDRIVE_UPLOAD_TOKEN'))
                     day = -1
 
                 f.seek(0)
